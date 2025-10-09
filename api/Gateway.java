@@ -22,11 +22,7 @@ public class Gateway {
     }
 
     public static void PUT(String[] currentContactData, String newName, String newNumber) throws InvalidAttributeValueException {
-        try {
-            generalPhoneBook.setContact(currentContactData, newName, newNumber);
-        } catch (InvalidAttributeValueException e) {
-            throw e;
-        }
+        generalPhoneBook.setContact(currentContactData, newName, newNumber);
     }
 
     public static void PATCH(String[] currentContactData, String newName, String newNumber) throws InvalidAttributeValueException {
@@ -35,15 +31,11 @@ public class Gateway {
                 "Somente um atributo pode ser modificado."
         );}
 
-        try {
-            if (newName != null) {
-                generalPhoneBook.setContact(currentContactData, newName, null);
-            }
-            else if (newNumber != null){
-                generalPhoneBook.setContact(currentContactData, null, newNumber);
-            }
-        } catch (InvalidAttributeValueException e) {
-            throw e;
+        if (newName != null) {
+            generalPhoneBook.setContact(currentContactData, newName, null);
+        }
+        else if (newNumber != null){
+            generalPhoneBook.setContact(currentContactData, null, newNumber);
         }
     }
 
@@ -51,12 +43,7 @@ public class Gateway {
         String name = currentContactData[0];
         String number = currentContactData[1];
 
-        try {
-            generalPhoneBook.deleteContact(name, number);
-        }
-        catch (InvalidAttributeValueException e){
-            throw e;
-        }
+        generalPhoneBook.deleteContact(name, number);
     }
 
 
