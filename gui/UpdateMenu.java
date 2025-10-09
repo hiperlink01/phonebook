@@ -1,12 +1,13 @@
 package gui;
 
 import api.Gateway;
-import system.Number;
 
 import javax.management.InvalidAttributeValueException;
 import javax.swing.*;
 
 public class UpdateMenu {
+
+    //TODO: PROGRAMAR JANELAS DE ERRO EM CASO DE NULOS
 
     public static void show(){
 
@@ -23,18 +24,20 @@ public class UpdateMenu {
                 options[options.length - 1]
         )];
 
+        String[] queryResult;
+
         if (selection.equals("NOME")){
 
             String name = JOptionPane.showInputDialog(
                     null,
-                    "Nome do contato:",
+                    "Nome atual do contato:",
                     "ATUALIZAR CONTATO",
                     JOptionPane.INFORMATION_MESSAGE
             );
 
             if (name == null) { return; }
 
-            String[] queryResult = Gateway.getContact(name);
+            queryResult = Gateway.GET(name, null);
 
             if (queryResult == null){
                 JOptionPane.showMessageDialog(
@@ -42,7 +45,7 @@ public class UpdateMenu {
                         "Revise seus dados.",
                         "CONTATO NÃO ENCONTRADO",
                         JOptionPane.INFORMATION_MESSAGE
-                );
+                ); return;
             }
             else {
                 JOptionPane.showMessageDialog(
@@ -53,22 +56,20 @@ public class UpdateMenu {
                 );
             }
 
-
         }
+        else if (selection.equals("NÚMERO")){
 
-        if (selection.equals("NÚMERO")){
-
-            String numberStr = JOptionPane.showInputDialog(
+            String number = JOptionPane.showInputDialog(
                     null,
                     "DDD + Número do contato:\n(PS: APENAS CARACTERES NUMÉRICOS)",
-                    "BUSCAR CONTATO",
+                    "ATUALIZAR CONTATO",
                     JOptionPane.INFORMATION_MESSAGE
             );
 
-            if (numberStr == null) { return; }
+            if (number == null) { return; }
 
             try {
-                Validate.number(numberStr);
+                Validate.number(number);
             }
             catch (InvalidAttributeValueException e){
                 JOptionPane.showMessageDialog(
@@ -79,7 +80,7 @@ public class UpdateMenu {
                 ); return;
             }
 
-            String[] queryResult = Gateway.getContact(new Number(numberStr));
+            queryResult = Gateway.GET(null, number);
 
             if (queryResult == null){
                 JOptionPane.showMessageDialog(
@@ -87,7 +88,7 @@ public class UpdateMenu {
                         "Revise seus dados.",
                         "CONTATO NÃO ENCONTRADO",
                         JOptionPane.INFORMATION_MESSAGE
-                );
+                ); return;
             }
             else {
                 JOptionPane.showMessageDialog(
@@ -98,6 +99,90 @@ public class UpdateMenu {
                 );
             }
         }
+        else{return;}
 
+        options = new String[] {"NOME", "NÚMERO", "NOME E NÚMERO", "CANCELAR"};
+
+        selection = options[JOptionPane.showOptionDialog(
+                null,
+                "NOME: " + queryResult[0] + "\nNÚMERO: "+ queryResult[1] +"\n\nModificar:",
+                "ATUALIZAR CONTATO",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                options[options.length - 1]
+        )];
+
+        String newName, newNumber;
+
+        if (selection .equals ("NOME")) {
+            newName = JOptionPane.showInputDialog(
+                    null,
+                    "Novo nome:",
+                    "ATUALIZAR CONTATO",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            try {
+                Gateway.PATCH(queryResult, newName, null);
+            } catch (InvalidAttributeValueException e) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "ENTRADA INVÁLIDA: " + e.getMessage(),
+                        "ERRO",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+        }
+        else if (selection .equals ("NÚMERO")) {
+            newNumber = JOptionPane.showInputDialog(
+                    null,
+                    "Novo número:",
+                    "ATUALIZAR CONTATO",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            try {
+                Gateway.PATCH(queryResult, null, newNumber);
+            } catch (InvalidAttributeValueException e) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "ENTRADA INVÁLIDA: " + e.getMessage(),
+                        "ERRO",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+        }
+        else if (selection .equals ("NOME E NÚMERO")) {
+            newName = JOptionPane.showInputDialog(
+                    null,
+                    "Novo nome:",
+                    "ATUALIZAR CONTATO",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            newNumber = JOptionPane.showInputDialog(
+                    null,
+                    "Novo número:",
+                    "ATUALIZAR CONTATO",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            try {
+                Gateway.PUT(queryResult, newName, newNumber);
+            } catch (InvalidAttributeValueException e) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "ENTRADA INVÁLIDA: " + e.getMessage(),
+                        "ERRO",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+        }
+        else { return; }
+
+        JOptionPane.showMessageDialog(null, "Operação realizada com sucesso!");
     }
+
 }
+
