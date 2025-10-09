@@ -1,7 +1,6 @@
 package gui;
 
 import api.Gateway;
-import system.Number;
 
 import javax.management.InvalidAttributeValueException;
 import javax.swing.*;
@@ -34,7 +33,7 @@ public class ReadMenu {
 
             if (name == null) { return; }
 
-            String[] queryResult = Gateway.getContact(name);
+            String[] queryResult = Gateway.GET(name, null);
 
             if (queryResult == null){
                 JOptionPane.showMessageDialog(
@@ -58,17 +57,17 @@ public class ReadMenu {
 
         if (selection.equals("NÚMERO")){
 
-            String numberStr = JOptionPane.showInputDialog(
+            String number = JOptionPane.showInputDialog(
                     null,
                     "DDD + Número do contato:\n(PS: APENAS CARACTERES NUMÉRICOS)",
                     "BUSCAR CONTATO",
                     JOptionPane.INFORMATION_MESSAGE
             );
 
-            if (numberStr == null) { return; }
+            if (number == null) { return; }
 
             try {
-                Validate.number(numberStr);
+                Validate.number(number);
             }
             catch (InvalidAttributeValueException e){
                 JOptionPane.showMessageDialog(
@@ -79,7 +78,7 @@ public class ReadMenu {
                 ); return;
             }
 
-            String[] queryResult = Gateway.getContact(new Number(numberStr));
+            String[] queryResult = Gateway.GET(null, number);
 
             if (queryResult == null){
                 JOptionPane.showMessageDialog(
@@ -89,6 +88,7 @@ public class ReadMenu {
                         JOptionPane.INFORMATION_MESSAGE
                 );
             }
+
             else {
                 JOptionPane.showMessageDialog(
                         null,

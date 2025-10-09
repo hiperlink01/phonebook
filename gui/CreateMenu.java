@@ -56,7 +56,7 @@ public class CreateMenu {
 
         if (confirm.equals("YES")){
             String[] processedContactStrings = {name, numberStr};
-            Gateway.postNewContact(processedContactStrings);
+            Gateway.POST(processedContactStrings);
         }
     }
 }
