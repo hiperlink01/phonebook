@@ -9,6 +9,15 @@ public class ReadMenu {
 
     public static void show() {
 
+        if (!(Gateway.GET() > 0)){
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Agenda vazia",
+                    "ATENÇÃO",
+                    JOptionPane.WARNING_MESSAGE
+            ); return;
+        }
+
         String[] options = {"NOME", "NÚMERO", "CANCELAR"};
 
         String selection = options[JOptionPane.showOptionDialog(
