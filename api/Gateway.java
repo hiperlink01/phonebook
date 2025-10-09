@@ -21,6 +21,8 @@ public class Gateway {
         return generalPhoneBook.getContactData(name, number);
     }
 
+    public static int GET() { return generalPhoneBook.getSize(); }
+
     public static void PUT(String[] currentContactData, String newName, String newNumber) throws InvalidAttributeValueException {
         generalPhoneBook.setContact(currentContactData, newName, newNumber);
     }
