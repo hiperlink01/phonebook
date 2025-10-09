@@ -3,7 +3,7 @@ package gui;
 import api.Gateway;
 
 import javax.management.InvalidAttributeValueException;
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
 public class ReadMenu {
 

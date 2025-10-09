@@ -1,7 +1,5 @@
 package gui;
 
-import api.Gateway;
-
 import javax.swing.JOptionPane;
 
 public class OptionsMenu {
