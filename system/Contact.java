@@ -1,13 +1,11 @@
 package system;
 
-import system.Number;
-
 public class Contact {
 
     private String name;
-    private Number number;
+    private String number;
 
-    public Contact(String name, Number number){
+    public Contact(String name, String number){
         this.name = name;
         this.number = number;
     }
@@ -15,14 +13,15 @@ public class Contact {
     public String getName(){
         return name;
     }
-    public Number getNumber() {
+    public String getNumber() {
         return number;
     }
 
     public void setName(String name){
         this.name = name;
     }
-    public void setNumber(Number number) {
+    public void setNumber(String number) {
+
         this.number = number;
     }
 

@@ -1,7 +1,5 @@
 package system;
 
-import system.Number;
-
 import javax.management.InvalidAttributeValueException;
 import java.util.ArrayList;
 
@@ -15,35 +13,27 @@ public class PhoneBook {
 
     //-----------GETTERS-----------
 
-    public String[] getContact(Number number) {
-        for (Contact contact : this.contacts) {
-            if (contact.getNumber().n .equals (number.n)) {
-                return new String[] {contact.getName(), contact.getNumber().n};
-            }
+    public String[] getContactData(String name, String number) {
+        Contact fetchedContact = getContact(name, number);
+        if (fetchedContact != null){
+            return new String[] {fetchedContact.getName(), fetchedContact.getNumber()};
         }
-        return null;
-    }
-    public String[] getContact(String name) {
-        for (Contact contact : this.contacts) {
-            if (contact.getName() .equals (name)) {
-                return new String[] {contact.getName(), contact.getNumber().n};
-            }
-        }
-        return null;
+        else { return null; }
     }
 
-    private Contact _getContact(Number number) {
-        for (Contact contact : this.contacts) {
-            if (contact.getNumber().n .equals (number.n)) {
-                return contact;
+    private Contact getContact(String name, String number) {
+        if (number != null){
+            for (Contact contact : this.contacts) {
+                if (contact.getNumber() .equals (number)) {
+                    return contact;
+                }
             }
         }
-        return null;
-    }
-    private Contact _getContact(String name) {
-        for (Contact contact : this.contacts) {
-            if (contact.getName() .equals (name)) {
-                return contact;
+        else if (name != null){
+            for (Contact contact : this.contacts) {
+                if (contact.getName() .equals (name)) {
+                    return contact;
+                }
             }
         }
         return null;
@@ -55,30 +45,43 @@ public class PhoneBook {
 
     //-----------SETTERS-----------
 
-    public void updateContact(Contact toUpdate, String newName) throws InvalidAttributeValueException{
-        if (toUpdate == null){ throw new InvalidAttributeValueException(
-                "Contato não existe."
+    public void setContact(String[] contactData, String newName, String newNumber) throws InvalidAttributeValueException{
+
+        if (contactData!=null) {
+
+            Contact fetchedContact = getContact(contactData[0], contactData[1]);
+
+            if (fetchedContact == null){ throw new InvalidAttributeValueException(
+                    "Contato não existe."
+            );}
+
+            if (newName!=null) {
+                fetchedContact.setName(newName);
+            }
+            if (newNumber!=null) {
+                fetchedContact.setNumber(newNumber);
+            }
+        }
+        else { throw new InvalidAttributeValueException(
+                    "Dados inválidos: Não é possível localizar o contato."
         );}
-        toUpdate.setName(newName);
-    }
-    public void updateContact(Contact toUpdate, Number newNumber) throws InvalidAttributeValueException{
-        if (toUpdate == null){ throw new InvalidAttributeValueException(
-                "Contato não existe."
-        );}
-        toUpdate.setNumber(newNumber);
-    }
-    public void updateContact(Contact toUpdate, String newName, Number newNumber) throws InvalidAttributeValueException{
-        if (toUpdate == null){ throw new InvalidAttributeValueException(
-                "Contato não existe."
-        );}
-        toUpdate.setName(newName);
-        toUpdate.setNumber(newNumber);
     }
 
     //-----------OPERATIONS-----------
 
-    public void addNewContact(String name, Number number) {
+    public void addNewContact(String name, String number) {
         this.contacts.addLast(new Contact(name, number));
     }
 
+    public void deleteContact(String name, String number) throws InvalidAttributeValueException {
+
+        Contact fetchedContact = getContact(name, number);
+
+        if (fetchedContact != null){
+            this.contacts.remove(fetchedContact);
+        }
+        else { throw new InvalidAttributeValueException(
+                "Contato não existe"
+        );}
+    }
 }
